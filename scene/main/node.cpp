@@ -1907,6 +1907,9 @@ void Node::set_editable_instance(Node *p_node, bool p_editable) {
 		p_node->data.editable_instance = false;
 		// Avoid this flag being needlessly saved;
 		// also give more visual feedback if editable children is re-enabled
+		if (is_displayed_folded())
+			__debugbreak();
+
 		set_display_folded(false);
 	} else {
 		p_node->data.editable_instance = true;
