@@ -95,7 +95,7 @@ void EditorFolding::_fill_folds(const Node *p_root, const Node *p_node, Array &p
 		if (!p_node->get_owner()) {
 			return; //not owned, bye
 		}
-		if (p_node->get_owner() != p_root && !p_root->is_editable_instance(p_node)) {
+		if (p_node->get_owner() != p_root && !(p_root->is_a_parent_of(p_node) && p_node->is_editable_instance())) {
 			return;
 		}
 	}
@@ -288,7 +288,7 @@ void EditorFolding::_do_node_unfolds(Node *p_root, Node *p_node, Set<RES> &resou
 		if (!p_node->get_owner()) {
 			return; //not owned, bye
 		}
-		if (p_node->get_owner() != p_root && !p_root->is_editable_instance(p_node)) {
+		if (p_node->get_owner() != p_root && !(p_root->is_a_parent_of(p_node) && p_node->is_editable_instance())) {
 			return;
 		}
 	}

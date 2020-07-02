@@ -539,7 +539,7 @@ ObjectID SpatialEditorViewport::_select_ray(const Point2 &p_pos, bool p_append, 
 		if (dist < closest_dist) {
 
 			item = Object::cast_to<Node>(spat);
-			while (item->get_owner() && item->get_owner() != edited_scene && !edited_scene->is_editable_instance(item->get_owner())) {
+			while (item->get_owner() && item->get_owner() != edited_scene && !(edited_scene->is_a_parent_of(item->get_owner()) && item->get_owner()->is_editable_instance()) {
 				item = item->get_owner();
 			}
 
@@ -697,7 +697,7 @@ void SpatialEditorViewport::_select_region() {
 			continue;
 
 		Node *item = Object::cast_to<Node>(sp);
-		while (item->get_owner() && item->get_owner() != edited_scene && !edited_scene->is_editable_instance(item->get_owner())) {
+		while (item->get_owner() && item->get_owner() != edited_scene && !(edited_scene->is_a_parent_of(item->get_owner()) && item->get_owner()->is_editable_instance())) {
 			item = item->get_owner();
 		}
 
@@ -1030,7 +1030,7 @@ void SpatialEditorViewport::_list_select(Ref<InputEventMouseButton> b) {
 
 	for (int i = 0; i < selection_results.size(); i++) {
 		Spatial *item = selection_results[i].item;
-		if (item != scene && item->get_owner() != scene && !scene->is_editable_instance(item->get_owner())) {
+		if (item != scene && item->get_owner() != scene && !(scene->is_a_parent_of(item->get_owner()) && item->get_owner()->is_editable_instance())) {
 			//invalid result
 			selection_results.remove(i);
 			i--;

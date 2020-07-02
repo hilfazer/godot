@@ -1916,11 +1916,8 @@ void Node::set_editable_instance(Node *p_node, bool p_editable) {
 	}
 }
 
-bool Node::is_editable_instance(const Node *p_node) const {
-	if (!p_node)
-		return false; //easier, null is never editable :)
-	ERR_FAIL_COND_V(!is_a_parent_of(p_node), false);
-	return p_node->data.editable_instance;
+bool Node::is_editable_instance() const {
+	return data.editable_instance;
 }
 
 void Node::set_scene_instance_state(const Ref<SceneState> &p_state) {

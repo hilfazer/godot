@@ -324,7 +324,7 @@ public:
 	String get_editor_description() const;
 
 	void set_editable_instance(Node *p_node, bool p_editable);
-	bool is_editable_instance(const Node *p_node) const;
+	bool is_editable_instance() const;
 
 	/* NOTIFICATIONS */
 
