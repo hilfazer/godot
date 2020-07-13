@@ -568,7 +568,7 @@ void SceneTreeDock::_tool_selected(int p_tool, bool p_confirm_override) {
 				Map<const Node *, Node *> duplimap;
 				Node *dup = node->duplicate_from_editor(duplimap);
 
-				if (EditorNode::get_singleton()->get_edited_scene()->is_editable_instance(node))
+				if (EditorNode::get_singleton()->get_edited_scene()->is_a_parent_of(node) && node->is_editable_instance())
 					editable_children.push_back(dup);
 
 				ERR_CONTINUE(!dup);
@@ -848,7 +848,7 @@ void SceneTreeDock::_tool_selected(int p_tool, bool p_confirm_override) {
 			if (e) {
 				Node *node = e->get();
 				if (node) {
-					bool editable = EditorNode::get_singleton()->get_edited_scene()->is_editable_instance(node);
+					bool editable = EditorNode::get_singleton()->get_edited_scene()->is_a_parent_of(node) && (node->is_editable_instance());
 
 					if (editable) {
 						editable_instance_remove_dialog->set_text(TTR("Disabling \"editable_instance\" will cause all properties of the node to be reverted to their default."));
@@ -2252,6 +2252,7 @@ static bool _is_node_visible(Node *p_node) {
 
 	if (!p_node->get_owner())
 		return false;
+
 	if (p_node->get_owner() != EditorNode::get_singleton()->get_edited_scene() && !EditorNode::get_singleton()->get_edited_scene()->is_editable_instance(p_node->get_owner()))
 		return false;
 
