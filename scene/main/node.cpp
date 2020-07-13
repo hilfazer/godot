@@ -1901,6 +1901,9 @@ String Node::get_editor_description() const {
 }
 
 void Node::set_editable_instance(Node *p_node, bool p_editable) {
+	if (is_owned_by_parent())
+		__debugbreak();
+
 	ERR_FAIL_NULL(p_node);
 	ERR_FAIL_COND(!is_a_parent_of(p_node));
 	if (!p_editable) {
