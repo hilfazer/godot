@@ -5864,8 +5864,10 @@ EditorNode::EditorNode() {
 
 	main_vbox = memnew(VBoxContainer);
 	gui_base->add_child(main_vbox);
-	main_vbox->set_anchors_and_margins_preset(Control::PRESET_WIDE, Control::PRESET_MODE_MINSIZE, 8);
-	main_vbox->add_constant_override("separation", 8 * EDSCALE);
+	main_vbox->set_anchors_and_margins_preset(Control::PRESET_WIDE, Control::PRESET_MODE_MINSIZE, 0);
+	// Add some margin at the top to avoid making text touch the window's top edge.
+	main_vbox->set_margin(MARGIN_TOP, Math::round(4 * EDSCALE));
+//	main_vbox->add_theme_constant_override("separation", Math::round(4 * EDSCALE));
 
 	menu_hb = memnew(HBoxContainer);
 	main_vbox->add_child(menu_hb);
