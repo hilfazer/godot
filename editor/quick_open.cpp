@@ -189,10 +189,11 @@ void EditorQuickOpen::_update_search() {
 	TreeItem *root = search_options->create_item();
 	EditorFileSystemDirectory *efsd = EditorFileSystem::get_singleton()->get_filesystem();
 	Vector<Pair<String, Ref<Texture> > > list;
-	const bool skip_addons = true;
 
 	_parse_fs(efsd, list);
 	list = _sort_fs(list);
+
+	const bool skip_addons = exclude_addons->is_pressed();
 
 	for (int i = 0; i < list.size(); i++) {
 		if (skip_addons && list[i].first.begins_with("addons/"))
@@ -267,6 +268,7 @@ EditorQuickOpen::EditorQuickOpen() {
 
 	exclude_addons = memnew(CheckBox);
 	exclude_addons->connect("pressed", this, "_update_search");
+	exclude_addons->set_pressed(true);
 	vbc->add_margin_child(TTR("Exclude addons"), exclude_addons);
 
 	search_options = memnew(Tree);
