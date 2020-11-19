@@ -32,6 +32,8 @@
 
 #include "core/os/keyboard.h"
 
+#include "scene/gui/check_box.h"
+
 void EditorQuickOpen::popup_dialog(const StringName &p_base, bool p_enable_multi, bool p_dontclear) {
 	base_type = p_base;
 	search_options->set_select_mode(p_enable_multi ? Tree::SELECT_MULTI : Tree::SELECT_SINGLE);
@@ -187,11 +189,15 @@ void EditorQuickOpen::_update_search() {
 	TreeItem *root = search_options->create_item();
 	EditorFileSystemDirectory *efsd = EditorFileSystem::get_singleton()->get_filesystem();
 	Vector<Pair<String, Ref<Texture> > > list;
+	const bool skip_addons = true;
 
 	_parse_fs(efsd, list);
 	list = _sort_fs(list);
 
 	for (int i = 0; i < list.size(); i++) {
+		if (skip_addons && list[i].first.begins_with("addons/"))
+			continue;
+
 		TreeItem *ti = search_options->create_item(root);
 		ti->set_text(0, list[i].first);
 		ti->set_icon(0, list[i].second);
@@ -244,6 +250,7 @@ void EditorQuickOpen::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_text_changed"), &EditorQuickOpen::_text_changed);
 	ClassDB::bind_method(D_METHOD("_confirmed"), &EditorQuickOpen::_confirmed);
 	ClassDB::bind_method(D_METHOD("_sbox_input"), &EditorQuickOpen::_sbox_input);
+	ClassDB::bind_method(D_METHOD("_update_search"), &EditorQuickOpen::_update_search);
 
 	ADD_SIGNAL(MethodInfo("quick_open"));
 }
@@ -252,11 +259,15 @@ EditorQuickOpen::EditorQuickOpen() {
 
 	VBoxContainer *vbc = memnew(VBoxContainer);
 	add_child(vbc);
-
+	
 	search_box = memnew(LineEdit);
 	search_box->connect("text_changed", this, "_text_changed");
 	search_box->connect("gui_input", this, "_sbox_input");
 	vbc->add_margin_child(TTR("Search:"), search_box);
+
+	exclude_addons = memnew(CheckBox);
+	exclude_addons->connect("pressed", this, "_update_search");
+	vbc->add_margin_child(TTR("Exclude addons"), exclude_addons);
 
 	search_options = memnew(Tree);
 	search_options->connect("item_activated", this, "_confirmed");

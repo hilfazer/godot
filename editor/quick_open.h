@@ -36,11 +36,14 @@
 #include "scene/gui/dialogs.h"
 #include "scene/gui/tree.h"
 
+class CheckBox;
+
 class EditorQuickOpen : public ConfirmationDialog {
 
 	GDCLASS(EditorQuickOpen, ConfirmationDialog);
 
 	LineEdit *search_box;
+	CheckBox *exclude_addons;
 	Tree *search_options;
 	StringName base_type;
 	StringName ei;
