@@ -260,16 +260,29 @@ EditorQuickOpen::EditorQuickOpen() {
 
 	VBoxContainer *vbc = memnew(VBoxContainer);
 	add_child(vbc);
+
+	HBoxContainer *hbc = memnew(HBoxContainer);
+	vbc->add_child(hbc);
 	
-	search_box = memnew(LineEdit);
-	search_box->connect("text_changed", this, "_text_changed");
-	search_box->connect("gui_input", this, "_sbox_input");
-	vbc->add_margin_child(TTR("Search:"), search_box);
+	auto search_label = memnew(Label);
+	search_label->set_text(TTR("Search:"));
+	search_label->set_h_size_flags(Control::SIZE_EXPAND_FILL);
+
+	hbc->add_child(search_label);
 
 	exclude_addons = memnew(CheckBox);
 	exclude_addons->connect("pressed", this, "_update_search");
 	exclude_addons->set_pressed(true);
-	vbc->add_margin_child(TTR("Exclude addons"), exclude_addons);
+	hbc->add_child(exclude_addons);
+
+	auto exclude_addons_label = memnew(Label);
+	exclude_addons_label->set_text(TTR("Exclude addons"));
+	hbc->add_child(exclude_addons_label);
+
+	search_box = memnew(LineEdit);
+	search_box->connect("text_changed", this, "_text_changed");
+	search_box->connect("gui_input", this, "_sbox_input");
+	vbc->add_child(search_box);
 
 	search_options = memnew(Tree);
 	search_options->connect("item_activated", this, "_confirmed");
