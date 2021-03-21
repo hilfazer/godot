@@ -624,11 +624,11 @@ bool EditorData::_find_updated_instances(Node *p_root, Node *p_node, Set<String>
 	return false;
 }
 
+template<typename T>
+Vector<T> setToVector(Set<T> const& set) {
+	Vector<T> vec;
 
-Vector<String> setToVector(Set<String> const& set) {
-	Vector<String> vec;
-
-	for (Set<String>::Element *E = set.front(); E; E = E->next()) {
+	for (Set<T>::Element *E = set.front(); E; E = E->next()) {
 		vec.push_back(E->get());
 	}
 
@@ -652,7 +652,7 @@ bool EditorData::check_and_update_scene(int p_idx) {
 	bool must_reload = _find_updated_instances(edited_scene[p_idx].root, edited_scene[p_idx].root, checked_scenes);
 
 	auto vecstrings = setToVector(checked_scenes);
-//	auto vecnodes = setToVector(nodes);
+	auto vecnodes = setToVector(nodes);
 
 
 	if ( true ) {
