@@ -624,6 +624,18 @@ bool EditorData::_find_updated_instances(Node *p_root, Node *p_node, Set<String>
 	return false;
 }
 
+
+Vector<String> setToVector(Set<String> const& set) {
+	Vector<String> vec;
+
+	for (Set<String>::Element *E = set.front(); E; E = E->next()) {
+		vec.push_back(E->get());
+	}
+
+	return vec;
+}
+
+
 bool EditorData::check_and_update_scene(int p_idx) {
 
 	ERR_FAIL_INDEX_V(p_idx, edited_scene.size(), false);
@@ -631,8 +643,17 @@ bool EditorData::check_and_update_scene(int p_idx) {
 		return false;
 
 	Set<String> checked_scenes;
+	Set<Node*> nodes;
+
+	for (int i = 0; i < p_idx; ++i) {
+		nodes.insert(edited_scene[p_idx].root);
+	}
 
 	bool must_reload = _find_updated_instances(edited_scene[p_idx].root, edited_scene[p_idx].root, checked_scenes);
+
+	auto vecstrings = setToVector(checked_scenes);
+//	auto vecnodes = setToVector(nodes);
+
 
 	if ( true ) {
 		Ref<PackedScene> pscene;
