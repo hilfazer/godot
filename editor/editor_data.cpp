@@ -625,15 +625,27 @@ bool EditorData::_find_updated_instances(Node *p_root, Node *p_node, Set<String>
 }
 
 template<typename T>
-Vector<T> setToVector(Set<T> const& set) {
+Vector<T> vectorize(Set<T> const& set) {
 	Vector<T> vec;
 
-	for (Set<T>::Element *E = set.front(); E; E = E->next()) {
+	for (auto const *E = set.front(); E; E = E->next()) {
 		vec.push_back(E->get());
 	}
 
 	return vec;
 }
+
+template<typename K, typename V>
+Vector<Pair<K,V>> vectorize(Map<K,V> const& map) {
+	Vector<Pair<K,V>> vec;
+
+	for (auto const *E = map.front(); E; E = E->next()) {
+		vec.push_back({ E->key(), E->value() });
+	}
+
+	return vec;
+}
+
 
 
 bool EditorData::check_and_update_scene(int p_idx) {
@@ -643,17 +655,8 @@ bool EditorData::check_and_update_scene(int p_idx) {
 		return false;
 
 	Set<String> checked_scenes;
-	Set<Node*> nodes;
-
-	for (int i = 0; i < p_idx; ++i) {
-		nodes.insert(edited_scene[p_idx].root);
-	}
 
 	bool must_reload = _find_updated_instances(edited_scene[p_idx].root, edited_scene[p_idx].root, checked_scenes);
-
-	auto vecstrings = setToVector(checked_scenes);
-	auto vecnodes = setToVector(nodes);
-
 
 	if ( true ) {
 		Ref<PackedScene> pscene;

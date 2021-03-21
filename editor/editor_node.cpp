@@ -1559,7 +1559,7 @@ void EditorNode::save_scene_list(Vector<String> p_scene_filenames) {
 }
 
 void EditorNode::restart_editor() {
-
+	
 	exiting = true;
 
 	String to_reopen;
