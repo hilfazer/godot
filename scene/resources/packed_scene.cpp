@@ -496,6 +496,10 @@ Error SceneState::_parse_node(Node *p_owner, Node *p_node, int p_parent_idx, Map
 		String name = E->get().name;
 		Variant value = p_node->get(E->get().name);
 
+		if (name == "collision_layer") {
+			name.empty();
+		}
+
 		bool isdefault = false;
 		Variant default_value = ClassDB::class_get_default_property_value(type, name);
 
@@ -526,6 +530,10 @@ Error SceneState::_parse_node(Node *p_owner, Node *p_node, int p_parent_idx, Map
 
 			bool exists = false;
 			Variant original;
+
+			if (name == "collision_layer") {
+				name.empty();
+			}
 
 			for (List<PackState>::Element *F = pack_state_stack.back(); F; F = F->prev()) {
 				//check all levels of pack to see if the property exists somewhere
