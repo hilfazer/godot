@@ -376,6 +376,29 @@ static int _vm_get_variant(const Variant &p_variant, HashMap<Variant, int, Varia
 	return idx;
 }
 
+template <typename T>
+Vector<T> vectorize(Set<T> const &set) {
+	Vector<T> vec;
+
+	for (auto const *E = set.front(); E; E = E->next()) {
+		vec.push_back(E->get());
+	}
+
+	return vec;
+}
+
+template <typename K, typename V>
+Vector<Pair<K, V> > vectorize(Map<K, V> const &map) {
+	Vector<Pair<K, V> > vec;
+
+	for (auto const *E = map.front(); E; E = E->next()) {
+		vec.push_back({ E->key(), E->value() });
+	}
+
+	return vec;
+}
+
+
 Error SceneState::_parse_node(Node *p_owner, Node *p_node, int p_parent_idx, Map<StringName, int> &name_map, HashMap<Variant, int, VariantHasher, VariantComparator> &variant_map, Map<Node *, int> &node_map, Map<Node *, int> &nodepath_map) {
 
 	// this function handles all the work related to properly packing scenes, be it
@@ -413,6 +436,9 @@ Error SceneState::_parse_node(Node *p_owner, Node *p_node, int p_parent_idx, Map
 	// we need to get the corresponding instance states.
 	// with the instance states, we can query for identical properties/groups
 	// and only save what has changed
+
+	auto nodeMapVec = vectorize(node_map);
+	auto nodePathMapVec = vectorize(nodepath_map);
 
 	List<PackState> pack_state_stack;
 
