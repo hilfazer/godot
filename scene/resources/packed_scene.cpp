@@ -1037,6 +1037,9 @@ Variant SceneState::get_property_value(int p_node, const StringName &p_property,
 
 	ERR_FAIL_COND_V(p_node < 0, Variant());
 
+	if (p_property == "collision_layer")
+		nodes.empty();
+
 	if (p_node < nodes.size()) {
 		//find in built-in nodes
 		int pc = nodes[p_node].properties.size();

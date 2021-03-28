@@ -342,6 +342,9 @@ RES ResourceLoader::load(const String &p_path, const String &p_type_hint, bool p
 	else
 		local_path = ProjectSettings::get_singleton()->localize_path(p_path);
 
+	if (local_path == "res://Base.tscn" || local_path == "res://Derived.tscn")
+		local_path.empty();
+
 	if (!p_no_cache) {
 
 		{

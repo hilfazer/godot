@@ -49,6 +49,9 @@ int Node::orphan_node_count = 0;
 
 void Node::_notification(int p_notification) {
 
+	if (data.filename == "res://WithDerived.tscn")
+		data.filename.empty();
+
 	switch (p_notification) {
 
 		case NOTIFICATION_PROCESS: {
