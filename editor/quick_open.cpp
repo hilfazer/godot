@@ -34,6 +34,8 @@
 
 #include "scene/gui/check_box.h"
 
+static const String addons_directory = "addons";
+
 void EditorQuickOpen::popup_dialog(const StringName &p_base, bool p_enable_multi, bool p_dontclear) {
 	base_type = p_base;
 	search_options->set_select_mode(p_enable_multi ? Tree::SELECT_MULTI : Tree::SELECT_SINGLE);
@@ -196,7 +198,7 @@ void EditorQuickOpen::_update_search() {
 	const bool skip_addons = exclude_addons->is_pressed();
 
 	for (int i = 0; i < list.size(); i++) {
-		if (skip_addons && list[i].first.begins_with("addons/"))
+		if (skip_addons && list[i].first.begins_with(addons_directory + "/"))
 			continue;
 
 		TreeItem *ti = search_options->create_item(root);
