@@ -58,6 +58,7 @@ class EditorQuickOpen : public ConfirmationDialog {
 
 	void _confirmed();
 	void _text_changed(const String &p_newtext);
+	void _save_exclude_addons() const;
 
 protected:
 	void _notification(int p_what);

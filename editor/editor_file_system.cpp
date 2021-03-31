@@ -2129,6 +2129,7 @@ EditorFileSystem::EditorFileSystem() {
 
 	ResourceLoader::import = _resource_import;
 	reimport_on_missing_imported_files = GLOBAL_DEF("editor/reimport_missing_imported_files", true);
+	GLOBAL_DEF("editor/exclude_addons_quick_open", false);
 
 	singleton = this;
 	filesystem = memnew(EditorFileSystemDirectory); //like, empty

@@ -36,6 +36,7 @@
 
 static const String addons_directory = "addons";
 
+
 void EditorQuickOpen::popup_dialog(const StringName &p_base, bool p_enable_multi, bool p_dontclear) {
 	base_type = p_base;
 	search_options->set_select_mode(p_enable_multi ? Tree::SELECT_MULTI : Tree::SELECT_SINGLE);
@@ -77,6 +78,10 @@ Vector<String> EditorQuickOpen::get_selected_files() const {
 void EditorQuickOpen::_text_changed(const String &p_newtext) {
 
 	_update_search();
+}
+
+void EditorQuickOpen::_save_exclude_addons() const {
+	ProjectSettings::get_singleton()->set("editor/exclude_addons_quick_open", exclude_addons->is_pressed());
 }
 
 void EditorQuickOpen::_sbox_input(const Ref<InputEvent> &p_ie) {
@@ -240,6 +245,11 @@ void EditorQuickOpen::_notification(int p_what) {
 		case NOTIFICATION_EXIT_TREE: {
 			disconnect("confirmed", this, "_confirmed");
 		} break;
+		case NOTIFICATION_VISIBILITY_CHANGED: {
+			if (is_visible()) {
+				exclude_addons->set_pressed(ProjectSettings::get_singleton()->get("editor/exclude_addons_quick_open"));
+			}
+		} break;
 	}
 }
 
@@ -254,6 +264,7 @@ void EditorQuickOpen::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("_confirmed"), &EditorQuickOpen::_confirmed);
 	ClassDB::bind_method(D_METHOD("_sbox_input"), &EditorQuickOpen::_sbox_input);
 	ClassDB::bind_method(D_METHOD("_update_search"), &EditorQuickOpen::_update_search);
+	ClassDB::bind_method(D_METHOD("_save_exclude_addons"), &EditorQuickOpen::_save_exclude_addons);
 
 	ADD_SIGNAL(MethodInfo("quick_open"));
 }
@@ -266,7 +277,7 @@ EditorQuickOpen::EditorQuickOpen() {
 	HBoxContainer *hbc = memnew(HBoxContainer);
 	vbc->add_child(hbc);
 	
-	auto search_label = memnew(Label);
+	Label *search_label = memnew(Label);
 	search_label->set_text(TTR("Search:"));
 	search_label->set_h_size_flags(Control::SIZE_EXPAND_FILL);
 
@@ -274,12 +285,16 @@ EditorQuickOpen::EditorQuickOpen() {
 
 	exclude_addons = memnew(CheckBox);
 	exclude_addons->connect("pressed", this, "_update_search");
-	exclude_addons->set_pressed(true);
 	hbc->add_child(exclude_addons);
 
-	auto exclude_addons_label = memnew(Label);
+	Label *exclude_addons_label = memnew(Label);
 	exclude_addons_label->set_text(TTR("Exclude addons"));
 	hbc->add_child(exclude_addons_label);
+
+	Button *exclude_addons_save = memnew(Button);
+	exclude_addons_save->set_text("Save to settings");
+	exclude_addons_save->connect("pressed", this, "_save_exclude_addons");
+	hbc->add_child(exclude_addons_save);
 
 	search_box = memnew(LineEdit);
 	search_box->connect("text_changed", this, "_text_changed");
