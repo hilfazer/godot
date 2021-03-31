@@ -449,6 +449,10 @@ bool EditorPropertyRevert::can_property_revert(Object *p_object, const StringNam
 
 	Node *node = Object::cast_to<Node>(p_object);
 
+	if (p_property == "collision_layer") {
+		p_property.hash();
+	}
+
 	if (node && EditorPropertyRevert::may_node_be_in_instance(node)) {
 		//check for difference including instantiation
 		Variant vorig;
