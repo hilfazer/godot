@@ -658,7 +658,7 @@ bool EditorData::check_and_update_scene(int p_idx) {
 
 	bool must_reload = _find_updated_instances(edited_scene[p_idx].root, edited_scene[p_idx].root, checked_scenes);
 
-	if (must_reload) {
+	if (true) {
 		Ref<PackedScene> pscene;
 		pscene.instance();
 
