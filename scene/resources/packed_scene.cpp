@@ -912,7 +912,6 @@ Error SceneState::pack(Node *p_scene) {
 		String path = scene->get_scene_inherited_state()->get_path();
 		Ref<PackedScene> instance = ResourceLoader::load(path);
 		if (instance.is_valid()) {
-
 			base_scene_idx = _vm_get_variant(instance, variant_map);
 		}
 	}
@@ -1057,6 +1056,10 @@ Variant SceneState::get_property_value(int p_node, const StringName &p_property,
 	//property not found, try on instance
 
 	if (base_scene_node_remap.has(p_node)) {
+
+		if (p_property == "collision_layer")
+			nodes.empty();
+
 		return _get_base_scene_state()->get_property_value(base_scene_node_remap[p_node], p_property, found);
 	}
 
@@ -1590,6 +1593,11 @@ int SceneState::find_name(const StringName &p_name) const {
 
 int SceneState::add_value(const Variant &p_value) {
 
+	Ref<PackedScene> ps = p_value;
+	if (ps.is_valid()) {
+		ps.is_null();
+	}
+
 	variants.push_back(p_value);
 	return variants.size() - 1;
 }
@@ -1634,6 +1642,13 @@ void SceneState::set_base_scene(int p_idx) {
 
 	ERR_FAIL_INDEX(p_idx, variants.size());
 	base_scene_idx = p_idx;
+
+	Ref<PackedScene> base_state_ = variants[p_idx];
+	if (base_state_.is_valid()) {
+		base_state = base_state_;
+	} else {
+		base_state = nullptr;
+	}
 }
 void SceneState::add_connection(int p_from, int p_to, int p_signal, int p_method, int p_flags, const Vector<int> &p_binds) {
 

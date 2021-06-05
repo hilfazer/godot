@@ -46,6 +46,7 @@ class SceneState : public Reference {
 	mutable Map<int, int> base_scene_node_remap;
 
 	int base_scene_idx;
+	Ref<PackedScene> base_state;
 
 	enum {
 		NO_PARENT_SAVED = 0x7FFFFFFF,
